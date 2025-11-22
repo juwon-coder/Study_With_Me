@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = '삭제하기';
-                deleteButton.classList.add('btn'); // .btn 클래스 추가
+                deleteButton.classList.add('btn'); 
                 deleteButton.style.backgroundColor = '#dc3545'; 
                 deleteButton.style.borderColor = '#dc3545';
                 deleteButton.style.marginLeft = '10px';
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         studies = studies.filter(s => s.id !== study.id);
                         saveStudies();
                         alert('스터디가 삭제되었습니다.');
-                        window.location.href = 'study-list.html';
+                        window.location.href = 'my-studies.html'; // 내 스터디 페이지로 이동
                     }
                 });
                 applyButton.parentNode.insertBefore(deleteButton, applyButton.nextSibling); // 수정 버튼 뒤에 삭제 버튼 추가
@@ -307,6 +307,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             document.getElementById('study-detail-content').innerHTML = '<h2>스터디를 찾을 수 없습니다.</h2><p>존재하지 않거나 삭제된 스터디입니다.</p>';
+        }
+    }
+
+    // --- 내 스터디 페이지: 내가 개설한 스터디 로드 ---
+    if (window.location.pathname.includes('my-studies.html')) {
+        const myStudiesGrid = document.getElementById('my-studies-grid');
+        const myStudiesMessage = document.getElementById('my-studies-message');
+
+        const myCreatedStudies = studies.filter(study => study.leader === currentLeader);
+
+        if (myStudiesGrid) {
+            myStudiesGrid.innerHTML = ''; // 기존 목록 초기화
+            if (myCreatedStudies.length === 0) {
+                myStudiesMessage.textContent = '아직 개설한 스터디가 없습니다. 새로운 스터디를 개설해보세요!';
+                myStudiesGrid.style.display = 'none';
+            } else {
+                myStudiesGrid.style.display = 'grid';
+                myStudiesMessage.textContent = '';
+                myCreatedStudies.forEach(study => {
+                    const studyCard = document.createElement('div');
+                    studyCard.classList.add('study-card');
+                    studyCard.innerHTML = `
+                        <span class="category">${study.category}</span>
+                        <h4><a href="study-detail.html?id=${study.id}">${study.title}</a></h4>
+                        <p>리더: ${study.leader}</p>
+                        <p>${study.description.substring(0, 100)}...</p>
+                        <p class="status ${study.status === '모집 완료' ? 'closed' : ''}">${study.status}</p>
+                    `;
+                    myStudiesGrid.appendChild(studyCard);
+                });
+            }
         }
     }
 });
