@@ -214,11 +214,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 applyFilters();
             }
         });
-        // 필터 변경 시 자동 적용
-        categoryFilter?.addEventListener('change', applyFilters);
-        methodFilter?.addEventListener('change', applyFilters);
-        statusFilter?.addEventListener('change', applyFilters);
-        searchInput?.addEventListener('input', applyFilters); // 입력할 때마다 필터 적용
+        // 필터 변경 시 자동 적용 (이 부분 제거)
+        // categoryFilter?.addEventListener('change', applyFilters);
+        // methodFilter?.addEventListener('change', applyFilters);
+        // statusFilter?.addEventListener('change', applyFilters);
+        // searchInput?.addEventListener('input', applyFilters); // 입력할 때마다 필터 적용 (이 부분 제거)
     }
 
     // --- 스터디 상세 페이지: 정보 로드 및 참여 신청 ---
@@ -240,27 +240,25 @@ document.addEventListener('DOMContentLoaded', () => {
             const applyButton = document.getElementById('apply-for-study');
             const applyMessage = document.getElementById('apply-message');
 
-            const detailContent = document.getElementById('study-detail-content');
-            const editDeleteContainer = document.createElement('div');
-            editDeleteContainer.style.marginTop = '30px';
-
             // --- 내가 개설한 스터디일 경우 수정/삭제 버튼 표시 ---
-            if (study.leader === currentLeader) { // 현재 브라우저에서 개설된 스터디의 리더와 같으면
-                applyButton.style.display = 'none'; // 참여 신청 버튼 숨기기
+            // 여기서 currentLeader는 이 브라우저에서 마지막으로 스터디를 개설한 리더명으로 가정
+            // 실제 환경에서는 로그인한 사용자 ID와 비교해야 함.
+            if (study.leader === currentLeader) { 
+                // applyButton.style.display = 'none'; // 참여 신청 버튼 숨기기 (대신 수정/삭제 버튼으로 교체)
 
-                const editButton = document.createElement('button');
-                editButton.textContent = '수정하기';
-                editButton.classList.add('btn');
-                editButton.style.marginRight = '10px';
-                editButton.addEventListener('click', () => {
+                applyButton.textContent = '수정하기';
+                applyButton.style.backgroundColor = '#28a745'; // 수정 버튼 색상
+                applyButton.style.borderColor = '#28a745';
+                applyButton.onclick = () => {
                     window.location.href = `create-study.html?editId=${study.id}`;
-                });
-    
+                };
+
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = '삭제하기';
                 deleteButton.classList.add('btn');
                 deleteButton.style.backgroundColor = '#dc3545'; 
                 deleteButton.style.borderColor = '#dc3545';
+                deleteButton.style.marginLeft = '10px';
                 deleteButton.addEventListener('click', () => {
                     if (confirm('정말로 이 스터디를 삭제하시겠습니까?')) {
                         studies = studies.filter(s => s.id !== study.id);
@@ -269,13 +267,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         window.location.href = 'study-list.html';
                     }
                 });
-
-                editDeleteContainer.appendChild(editButton);
-                editDeleteContainer.appendChild(deleteButton);
-                detailContent.appendChild(editDeleteContainer);
+                applyButton.parentNode.insertBefore(deleteButton, applyButton.nextSibling); // 수정 버튼 뒤에 삭제 버튼 추가
 
             } else { // 다른 사람이 개설한 스터디일 경우 (또는 내가 개설한 스터디가 아닌 경우)
-                editDeleteContainer.style.display = 'none'; // 수정/삭제 버튼 숨기기
+                // 수정/삭제 관련 요소는 표시하지 않음
+                // applyButton은 신청 버튼으로 그대로 사용
+
+                // 스터디 신청 상태 확인
+                const isApplied = study.appliedMembers && study.appliedMembers.includes(currentLeader);
 
                 if (study.status === '모집 완료') {
                     applyButton.textContent = '모집 완료';
@@ -283,9 +282,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     applyButton.style.backgroundColor = '#6c757d'; 
                     applyMessage.textContent = '이 스터디는 현재 모집이 완료되었습니다.';
                     applyMessage.style.color = '#dc3545';
+                } else if (isApplied) {
+                    applyButton.textContent = '신청 완료';
+                    applyButton.disabled = true;
+                    applyButton.style.backgroundColor = '#6c757d';
+                    applyMessage.textContent = '이미 이 스터디에 참여 신청을 완료했습니다.';
+                    applyMessage.style.color = 'green';
                 } else {
                     applyButton.addEventListener('click', () => {
                         alert(`${study.title} 스터디에 참여를 신청합니다! (실제로는 신청 메시지 작성 폼 등이 나타납니다.)`);
+                        if (!study.appliedMembers) {
+                            study.appliedMembers = [];
+                        }
+                        study.appliedMembers.push(currentLeader); // 현재 리더가 신청한 것으로 기록
+                        saveStudies();
+
                         applyMessage.textContent = '참여 신청이 완료되었습니다. 리더의 승인을 기다려주세요!';
                         applyMessage.style.color = 'green';
                         applyButton.disabled = true;
