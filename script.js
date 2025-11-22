@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     applyMessage.style.color = 'green';
                 } else {
                     applyButton.addEventListener('click', () => {
-                        alert(`${study.title} 스터디에 참여를 신청합니다! (실제로는 신청 메시지 작성 폼 등이 나타납니다.)`);
+                        alert(`${study.title} 스터디에 참여를 신청합니다!`); // 메시지 수정
                         if (!study.appliedMembers) {
                             study.appliedMembers = [];
                         }
