@@ -25,9 +25,13 @@
     <main>
         <section id="my-studies-content">
             <div class="container">
-                <h2 id="my-studies-title">내가 개설한 스터디</h2>
+                <h2 id="my-studies-title">내 스터디</h2>
+                <div class="filter-buttons" style="margin-bottom: 20px; text-align: center;">
+                    <button id="show-created" class="btn active">내가 개설한 스터디</button>
+                    <button id="show-applied" class="btn" style="margin-left: 10px;">내가 신청한 스터디</button>
+                </div>
                 <div class="study-grid" id="my-studies-grid">
-                    <!-- My created study cards will be loaded here by JavaScript -->
+                    <!-- My created or applied study cards will be loaded here by JavaScript -->
                 </div>
                 <p id="my-studies-message" style="text-align: center; margin-top: 20px; color: #555;"></p>
             </div>

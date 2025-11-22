@@ -33,6 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
         studies = exampleStudies; // 예시 스터디로 초기화
         saveStudies();
         saveMyCreatedLeaders(); // 초기화 시 빈 배열 저장
+
+        // 예시 스터디 개설 리더들을 myCreatedLeaders에 추가 (선택적)
+        // exampleStudies.forEach(s => {
+        //     if (!myCreatedLeaders.includes(s.leader)) {
+        //         myCreatedLeaders.push(s.leader);
+        //     }
+        // });
+        // saveMyCreatedLeaders();
     }
 
     // --- 문의하기 폼 제출 처리 (예시) ---
@@ -170,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryFilter = document.getElementById('category-filter');
     const methodFilter = document.getElementById('method-filter');
     const statusFilter = document.getElementById('status-filter');
+    const myStudiesFilter = document.getElementById('my-studies-filter'); // 새로운 필터 추가
     const applyFiltersBtn = document.getElementById('apply-filters');
 
     function renderStudies(filteredStudies, targetGrid) {
@@ -202,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedCategory = categoryFilter ? categoryFilter.value : 'all';
         const selectedMethod = methodFilter ? methodFilter.value : 'all';
         const selectedStatus = statusFilter ? statusFilter.value : 'all';
+        const selectedMyStudiesFilter = myStudiesFilter ? myStudiesFilter.value : 'all'; // 새로운 필터 값
 
         if (searchTerm) {
             filtered = filtered.filter(study =>
@@ -223,11 +233,15 @@ document.addEventListener('DOMContentLoaded', () => {
             filtered = filtered.filter(study => study.status === selectedStatus);
         }
 
-        renderStudies(filtered, allStudiesGrid); // allStudiesGrid로 변경
+        if (selectedMyStudiesFilter === 'my-created') {
+            filtered = filtered.filter(study => myCreatedLeaders.includes(study.leader));
+        }
+
+        renderStudies(filtered, allStudiesGrid); 
     }
 
     if (window.location.pathname.includes('study-list.html')) {
-        renderStudies(studies, allStudiesGrid); // 초기 로드 및 targetGrid 인자 추가
+        renderStudies(studies, allStudiesGrid); 
         applyFiltersBtn?.addEventListener('click', applyFilters);
         searchInput?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -240,23 +254,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('study-detail.html')) {
         const urlParams = new URLSearchParams(window.location.search);
         const studyId = urlParams.get('id'); 
-        let study = studies.find(s => s.id === studyId); // let으로 변경하여 업데이트 가능하게
+        let study = studies.find(s => s.id === studyId); 
 
         if (study) {
             document.getElementById('detail-study-title').textContent = study.title;
             document.getElementById('detail-study-category').textContent = study.category;
-            document.getElementById('detail-study-members').textContent = `${study.currentMembersCount}/${study.members}명`; // 모집현황 반영
+            document.getElementById('detail-study-members').textContent = `${study.currentMembersCount}/${study.members}명`; 
             document.getElementById('detail-study-method').textContent = study.method;
             document.getElementById('detail-study-schedule').textContent = study.schedule || '정보 없음';
             document.getElementById('detail-study-deadline').textContent = study.deadline || '상시 모집';
             document.getElementById('detail-study-description').textContent = study.description;
-            document.getElementById('detail-study-leader').textContent = study.leader; // 리더명 표시
+            document.getElementById('detail-study-leader').textContent = study.leader; 
 
             const applyButton = document.getElementById('apply-for-study');
             const applyMessage = document.getElementById('apply-message');
 
             // --- 내가 개설한 스터디일 경우 수정/삭제 버튼 표시 ---
-            if (myCreatedLeaders.includes(study.leader)) { // myCreatedLeaders 사용
+            if (myCreatedLeaders.includes(study.leader)) { 
                 applyButton.textContent = '수정하기';
                 applyButton.style.backgroundColor = '#28a745'; 
                 applyButton.style.borderColor = '#28a745';
@@ -281,7 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 applyButton.parentNode.insertBefore(deleteButton, applyButton.nextSibling); 
 
             } else { // 다른 사람이 개설한 스터디일 경우 (또는 내가 개설한 스터디가 아닌 경우)
-
                 const isApplied = study.appliedMembers && study.appliedMembers.includes(currentLeader);
 
                 if (study.status === '모집 완료') {
@@ -302,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             alert('모집 인원이 가득 찼습니다. 다음 스터디를 이용해주세요!');
                             study.status = '모집 완료';
                             saveStudies();
-                            window.location.reload(); // 상태 업데이트 후 페이지 새로고침
+                            window.location.reload(); 
                             return;
                         }
 
@@ -311,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             study.appliedMembers = [];
                         }
                         study.appliedMembers.push(currentLeader); 
-                        study.currentMembersCount++; // 인원 증가
+                        study.currentMembersCount++; 
 
                         if (study.currentMembersCount >= study.members) {
                             study.status = '모집 완료';
@@ -325,7 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         applyButton.textContent = '신청 완료';
                         applyButton.style.backgroundColor = '#6c757d';
                         
-                        // 모집 현황 바로 업데이트
                         document.getElementById('detail-study-members').textContent = `${study.currentMembersCount}/${study.members}명`;
                         if (study.status === '모집 완료') {
                             document.getElementById('detail-study-members').style.color = '#dc3545';
@@ -342,31 +354,60 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('my-studies.html')) {
         const myStudiesGrid = document.getElementById('my-studies-grid');
         const myStudiesMessage = document.getElementById('my-studies-message');
+        const showCreatedBtn = document.getElementById('show-created');
+        const showAppliedBtn = document.getElementById('show-applied');
 
-        const myCreatedStudies = studies.filter(study => myCreatedLeaders.includes(study.leader)); // myCreatedLeaders 사용
+        let currentMyStudiesView = 'created'; // 기본값: 내가 개설한 스터디
 
-        if (myStudiesGrid) {
-            myStudiesGrid.innerHTML = ''; 
-            if (myCreatedStudies.length === 0) {
-                myStudiesMessage.textContent = '아직 개설한 스터디가 없습니다. 새로운 스터디를 개설해보세요!';
-                myStudiesGrid.style.display = 'none';
-            } else {
-                myStudiesGrid.style.display = 'grid';
-                myStudiesMessage.textContent = '';
-                myCreatedStudies.forEach(study => {
-                    const studyCard = document.createElement('div');
-                    studyCard.classList.add('study-card');
-                    studyCard.innerHTML = `
-                        <span class="category">${study.category}</span>
-                        <h4><a href="study-detail.html?id=${study.id}">${study.title}</a></h4>
-                        <p>리더: ${study.leader}</p>
-                        <p>모집현황: ${study.currentMembersCount}/${study.members}</p>
-                        <p>${study.description.substring(0, 100)}...</p>
-                        <p class="status ${study.status === '모집 완료' ? 'closed' : ''}">${study.status}</p>
-                    `;
-                    myStudiesGrid.appendChild(studyCard);
-                });
+        function renderMyStudies() {
+            let filteredMyStudies = [];
+            if (currentMyStudiesView === 'created') {
+                filteredMyStudies = studies.filter(study => myCreatedLeaders.includes(study.leader));
+                myStudiesMessage.textContent = filteredMyStudies.length === 0 ? '아직 개설한 스터디가 없습니다. 새로운 스터디를 개설해보세요!' : '';
+                document.getElementById('my-studies-title').textContent = '내가 개설한 스터디';
+            } else if (currentMyStudiesView === 'applied') {
+                filteredMyStudies = studies.filter(study => study.appliedMembers.includes(currentLeader));
+                myStudiesMessage.textContent = filteredMyStudies.length === 0 ? '아직 신청한 스터디가 없습니다. 다른 스터디에 참여 신청을 해보세요!' : '';
+                document.getElementById('my-studies-title').textContent = '내가 신청한 스터디';
+            }
+
+            if (myStudiesGrid) {
+                myStudiesGrid.innerHTML = ''; 
+                if (filteredMyStudies.length === 0) {
+                    myStudiesGrid.style.display = 'none';
+                } else {
+                    myStudiesGrid.style.display = 'grid';
+                    filteredMyStudies.forEach(study => {
+                        const studyCard = document.createElement('div');
+                        studyCard.classList.add('study-card');
+                        studyCard.innerHTML = `
+                            <span class="category">${study.category}</span>
+                            <h4><a href="study-detail.html?id=${study.id}">${study.title}</a></h4>
+                            <p>리더: ${study.leader}</p>
+                            <p>모집현황: ${study.currentMembersCount}/${study.members}</p>
+                            <p>${study.description.substring(0, 100)}...</p>
+                            <p class="status ${study.status === '모집 완료' ? 'closed' : ''}">${study.status}</p>
+                        `;
+                        myStudiesGrid.appendChild(studyCard);
+                    });
+                }
             }
         }
+
+        showCreatedBtn?.addEventListener('click', () => {
+            currentMyStudiesView = 'created';
+            showCreatedBtn.classList.add('active');
+            showAppliedBtn.classList.remove('active');
+            renderMyStudies();
+        });
+
+        showAppliedBtn?.addEventListener('click', () => {
+            currentMyStudiesView = 'applied';
+            showAppliedBtn.classList.add('active');
+            showCreatedBtn.classList.remove('active');
+            renderMyStudies();
+        });
+
+        renderMyStudies(); // 초기 로드
     }
 });

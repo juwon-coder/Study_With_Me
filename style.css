@@ -328,6 +328,19 @@ footer p {
     min-width: 120px; /* 버튼 최소 너비 설정 */
 }
 
+/* 동적으로 생성되는 수정/삭제 버튼에 대한 스타일 */
+.btn {
+    padding: 10px 20px;
+    font-size: 1em;
+    min-width: 120px; /* 모든 버튼의 최소 너비 통일 */
+    box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+}
+
+#study-detail-content .btn {
+    padding: 12px 25px; /* 상세 페이지 버튼 패딩 */
+    font-size: 1.1em; /* 상세 페이지 버튼 폰트 크기 */
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     header .container {
