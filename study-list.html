@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyBuddy - 스터디 목록</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="index.html">StudyBuddy</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">홈</a></li>
+                    <li><a href="about.html">소개</a></li>
+                    <li><a href="contact.html">문의</a></li>
+                    <li><a href="create-study.html">스터디 개설</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="study-list-content">
+            <div class="container">
+                <h2>모든 스터디</h2>
+                <div id="search-filter-area">
+                    <input type="text" id="search-input" placeholder="스터디명, 주제 검색..." class="form-group-inline">
+                    <select id="category-filter" class="form-group-inline">
+                        <option value="all">모든 카테고리</option>
+                        <option value="어학">어학</option>
+                        <option value="코딩">코딩</option>
+                        <option value="자격증">자격증</option>
+                        <option value="취업">취업</option>
+                        <option value="기타">기타</option>
+                    </select>
+                    <select id="method-filter" class="form-group-inline">
+                        <option value="all">모든 방식</option>
+                        <option value="온라인">온라인</option>
+                        <option value="오프라인">오프라인</option>
+                        <option value="혼합">온/오프라인 혼합</option>
+                    </select>
+                    <select id="status-filter" class="form-group-inline">
+                        <option value="all">모든 상태</option>
+                        <option value="모집 중">모집 중</option>
+                        <option value="모집 완료">모집 완료</option>
+                    </select>
+                    <button id="apply-filters" class="btn form-group-inline">필터 적용</button>
+                </div>
+                <div class="study-grid" id="all-studies-grid">
+                    <!-- All study cards will be loaded here by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 StudyBuddy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

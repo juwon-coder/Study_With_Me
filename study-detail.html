@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyBuddy - 스터디 상세</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="index.html">StudyBuddy</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">홈</a></li>
+                    <li><a href="about.html">소개</a></li>
+                    <li><a href="contact.html">문의</a></li>
+                    <li><a href="create-study.html">스터디 개설</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="study-detail-content">
+            <div class="container">
+                <h2 id="detail-study-title"></h2>
+                <p class="category"><span id="detail-study-category"></span></p>
+                <p><strong>모집 인원:</strong> <span id="detail-study-members"></span>명</p>
+                <p><strong>진행 방식:</strong> <span id="detail-study-method"></span></p>
+                <p><strong>예상 스터디 일정:</strong> <span id="detail-study-schedule"></span></p>
+                <p><strong>모집 마감일:</strong> <span id="detail-study-deadline"></span></p>
+                <h3>스터디 설명</h3>
+                <p id="detail-study-description"></p>
+                
+                <button id="apply-for-study" class="btn">스터디 참여 신청</button>
+                <div id="apply-message" style="margin-top: 20px; color: green;"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 StudyBuddy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyBuddy - 스터디 개설</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="index.html">StudyBuddy</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">홈</a></li>
+                    <li><a href="about.html">소개</a></li>
+                    <li><a href="contact.html">문의</a></li>
+                    <li><a href="create-study.html">스터디 개설</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="create-study-content">
+            <div class="container">
+                <h2>새 스터디 개설</h2>
+                <form id="create-study-form">
+                    <div class="form-group">
+                        <label for="study-title">스터디명:</label>
+                        <input type="text" id="study-title" name="study-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="study-category">카테고리:</label>
+                        <select id="study-category" name="study-category" required>
+                            <option value="">선택하세요</option>
+                            <option value="어학">어학</option>
+                            <option value="코딩">코딩</option>
+                            <option value="자격증">자격증</option>
+                            <option value="취업">취업</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="study-description">스터디 설명:</label>
+                        <textarea id="study-description" name="study-description" rows="8" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="study-members">모집 인원:</label>
+                        <input type="number" id="study-members" name="study-members" min="2" max="20" value="4" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="study-method">진행 방식:</label>
+                        <select id="study-method" name="study-method" required>
+                            <option value="">선택하세요</option>
+                            <option value="온라인">온라인</option>
+                            <option value="오프라인">오프라인</option>
+                            <option value="혼합">온/오프라인 혼합</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="study-schedule">예상 스터디 일정:</label>
+                        <input type="text" id="study-schedule" name="study-schedule" placeholder="예: 매주 화요일 저녁 7시, 주 2회"> 
+                    </div>
+                    <div class="form-group">
+                        <label for="study-deadline">모집 마감일:</label>
+                        <input type="date" id="study-deadline" name="study-deadline">
+                    </div>
+                    <button type="submit" class="btn">스터디 개설하기</button>
+                </form>
+                <div id="create-study-message" style="margin-top: 20px; color: green;"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 StudyBuddy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

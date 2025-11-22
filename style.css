@@ -1,0 +1,387 @@
+/* 기본 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+a {
+    color: #28a745;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #218838;
+    text-decoration: none;
+}
+
+/* 헤더 */
+header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+header h1 a {
+    color: #333;
+    text-decoration: none;
+}
+
+header h1 a:hover {
+    color: #28a745;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+header nav ul li {
+    margin-left: 20px;
+}
+
+header nav ul li a {
+    color: #555;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    color: #28a745;
+    text-decoration: none;
+}
+
+/* 메인 섹션 */
+main {
+    padding: 20px 0;
+}
+
+/* 히어로 섹션 */
+#hero {
+    background-color: #e6ffe6;
+    color: #333;
+    text-align: center;
+    padding: 60px 20px;
+    margin-bottom: 40px;
+    border-radius: 8px;
+}
+
+#hero h2 {
+    font-size: 3em;
+    margin-bottom: 15px;
+    color: #28a745;
+}
+
+#hero p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+/* 추천 스터디 섹션 */
+#featured-studies {
+    margin-bottom: 40px;
+}
+
+#featured-studies h3 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.study-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.study-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.study-card:hover {
+    transform: translateY(-5px);
+}
+
+.study-card h4 {
+    margin-top: 0;
+    color: #28a745;
+    font-size: 1.5em;
+}
+
+.study-card p {
+    font-size: 0.9em;
+    color: #666;
+    line-height: 1.5;
+}
+
+.study-card .category {
+    display: inline-block;
+    background-color: #f0f0f0;
+    color: #555;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    margin-bottom: 10px;
+}
+
+.study-card .status {
+    font-weight: bold;
+    color: #28a745;
+}
+
+.study-card .status.closed {
+    color: #dc3545;
+}
+
+/* About, Contact 페이지 컨텐츠 */
+#about-content, #contact-content, #create-study-content, #study-list-content, #study-detail-content {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#about-content h2, #contact-content h2, #create-study-content h2, #study-list-content h2, #study-detail-content h2 {
+    color: #28a745;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+    text-align: center;
+}
+
+#about-content h3 {
+    color: #333;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+}
+
+#about-content p, #contact-content p, #create-study-content p, #study-list-content p, #study-detail-content p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+
+/* 폼 스타일 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="number"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #28a745;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+textarea {
+    resize: vertical; /* 세로 크기 조절만 가능하도록 */
+}
+
+/* 푸터 */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+/* 인라인 폼 그룹 스타일 */
+.form-group-inline {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px; /* 모바일 환경 대비 */
+    vertical-align: middle;
+}
+
+#search-filter-area {
+    background-color: #f0fdf4;
+    border: 1px solid #d1ead1;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap; /* 반응형을 위해 추가 */
+    gap: 10px; /* 요소들 사이의 간격 */
+    align-items: center;
+}
+
+#search-filter-area input[type="text"],
+#search-filter-area select {
+    flex: 1; /* 유연하게 공간 차지 */
+    min-width: 150px; /* 최소 너비 설정 */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+#search-filter-area button {
+    padding: 10px 15px;
+    /* flex-grow: 0; */ /* 버튼은 유연하게 늘어나지 않도록 */
+}
+
+/* 스터디 상세 페이지 스타일 */
+#study-detail-content .category {
+    display: inline-block;
+    background-color: #e6ffe6;
+    color: #28a745;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#study-detail-content h3 {
+    color: #28a745;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+#study-detail-content p {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+#study-detail-content strong {
+    color: #555;
+}
+
+#apply-for-study {
+    margin-top: 30px;
+    width: auto; /* 버튼 너비를 내용에 맞게 */
+    padding: 12px 25px;
+    font-size: 1.1em;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+    }
+
+    header nav ul {
+        margin-top: 10px;
+    }
+
+    header nav ul li {
+        margin: 0 10px;
+    }
+
+    #hero h2 {
+        font-size: 2.5em;
+    }
+
+    #hero p {
+        font-size: 1em;
+    }
+
+    #search-filter-area {
+        flex-direction: column;
+        align-items: stretch; /* 세로 정렬 시 너비 전체 사용 */
+    }
+
+    #search-filter-area input[type="text"],
+    #search-filter-area select,
+    #search-filter-area button {
+        width: 100%; /* 모바일에서 전체 너비 사용 */
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 20px;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header nav ul li {
+        margin: 5px 0;
+    }
+
+    .btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #hero h2 {
+        font-size: 2em;
+    }
+}
