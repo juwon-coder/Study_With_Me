@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 데이터 관리 (임시) ---
     // 실제 백엔드 없이 데이터를 관리하기 위한 간단한 로직
     let studies = JSON.parse(localStorage.getItem('studies')) || [];
-    let nextStudyId = studies.length > 0 ? Math.max(...studies.map(s => s.id)) + 1 : 1;
+    // let nextStudyId = studies.length > 0 ? Math.max(...studies.map(s => s.id)) + 1 : 1; // 사용자가 ID 입력하므로 필요 없음
 
     function saveStudies() {
         localStorage.setItem('studies', JSON.stringify(studies));
@@ -57,8 +57,21 @@ document.addEventListener('DOMContentLoaded', () => {
         createStudyForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const newStudy = {
-                id: nextStudyId++,
+            const studyId = document.getElementById('study-id').value.trim();
+            const isEditing = !!document.getElementById('create-study-form').dataset.editingId; // 수정 모드인지 확인
+
+            if (!studyId) {
+                alert('스터디 고유 ID를 입력해주세요.');
+                return;
+            }
+
+            if (!isEditing && studies.some(s => s.id === studyId)) {
+                alert('이미 존재하는 스터디 ID입니다. 다른 ID를 사용해주세요.');
+                return;
+            }
+
+            const newStudyData = {
+                id: studyId,
                 title: document.getElementById('study-title').value,
                 category: document.getElementById('study-category').value,
                 description: document.getElementById('study-description').value,
@@ -70,23 +83,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 createdAt: new Date().toISOString()
             };
 
-            studies.unshift(newStudy); // 최신 스터디가 맨 위에 오도록
+            if (isEditing) {
+                // 기존 스터디 업데이트
+                const editingId = document.getElementById('create-study-form').dataset.editingId;
+                studies = studies.map(s => (s.id === editingId ? { ...s, ...newStudyData } : s));
+                alert('스터디가 성공적으로 수정되었습니다!');
+            } else {
+                // 새로운 스터디 추가
+                studies.unshift(newStudyData); // 최신 스터디가 맨 위에 오도록
+                alert('새로운 스터디가 성공적으로 개설되었습니다!');
+            }
             saveStudies();
 
-            const createStudyMessage = document.getElementById('create-study-message');
-            createStudyMessage.textContent = '새로운 스터디가 성공적으로 개설되었습니다!';
+            // const createStudyMessage = document.getElementById('create-study-message');
+            // createStudyMessage.textContent = isEditing ? '스터디가 성공적으로 수정되었습니다!' : '새로운 스터디가 성공적으로 개설되었습니다!';
             createStudyForm.reset();
-            console.log('개설된 스터디:', newStudy);
+            console.log('처리된 스터디:', newStudyData);
 
-            // index.html의 Featured Studies를 업데이트하기 위해 페이지를 리로드 (간단한 예시)
-            // 실제 앱에서는 컴포넌트 단위로 상태를 관리합니다.
-            if (window.location.pathname.includes('create-study.html')) {
-                setTimeout(() => {
-                    alert('스터디 개설이 완료되었습니다. 홈 페이지로 이동합니다.');
-                    window.location.href = 'index.html';
-                }, 1000);
-            }
+            setTimeout(() => {
+                window.location.href = 'study-list.html'; // 목록 페이지로 이동
+            }, 1000);
         });
+
+        // 수정 모드로 페이지 접근 시 폼 채우기
+        const urlParams = new URLSearchParams(window.location.search);
+        const editStudyId = urlParams.get('editId');
+        if (editStudyId) {
+            const studyToEdit = studies.find(s => s.id === editStudyId);
+            if (studyToEdit) {
+                document.getElementById('study-id').value = studyToEdit.id;
+                document.getElementById('study-id').readOnly = true; // ID는 수정 불가
+                document.getElementById('study-title').value = studyToEdit.title;
+                document.getElementById('study-category').value = studyToEdit.category;
+                document.getElementById('study-description').value = studyToEdit.description;
+                document.getElementById('study-members').value = studyToEdit.members;
+                document.getElementById('study-method').value = studyToEdit.method;
+                document.getElementById('study-schedule').value = studyToEdit.schedule;
+                document.getElementById('study-deadline').value = studyToEdit.deadline;
+                document.querySelector('#create-study-content h2').textContent = '스터디 수정';
+                document.querySelector('#create-study-form button[type="submit"]').textContent = '스터디 수정하기';
+                createStudyForm.dataset.editingId = editStudyId; // 수정 모드임을 표시
+            } else {
+                alert('수정할 스터디를 찾을 수 없습니다.');
+                window.location.href = 'study-list.html';
+            }
+        }
     }
 
     // --- 스터디 목록 페이지: 스터디 로드 및 필터링 ---
@@ -162,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 스터디 상세 페이지: 정보 로드 및 참여 신청 ---
     if (window.location.pathname.includes('study-detail.html')) {
         const urlParams = new URLSearchParams(window.location.search);
-        const studyId = parseInt(urlParams.get('id'));
+        const studyId = urlParams.get('id'); // ID는 문자열로 관리
         const study = studies.find(s => s.id === studyId);
 
         if (study) {
@@ -177,6 +218,38 @@ document.addEventListener('DOMContentLoaded', () => {
             const applyButton = document.getElementById('apply-for-study');
             const applyMessage = document.getElementById('apply-message');
 
+            // --- 수정/삭제 버튼 추가 ---
+            const detailContent = document.getElementById('study-detail-content');
+            const editDeleteContainer = document.createElement('div');
+            editDeleteContainer.style.marginTop = '30px';
+
+            const editButton = document.createElement('button');
+            editButton.textContent = '수정하기';
+            editButton.classList.add('btn');
+            editButton.style.marginRight = '10px';
+            editButton.addEventListener('click', () => {
+                window.location.href = `create-study.html?editId=${study.id}`;
+            });
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = '삭제하기';
+            deleteButton.classList.add('btn');
+            deleteButton.style.backgroundColor = '#dc3545'; // 삭제 버튼 색상
+            deleteButton.style.borderColor = '#dc3545';
+            deleteButton.addEventListener('click', () => {
+                if (confirm('정말로 이 스터디를 삭제하시겠습니까?')) {
+                    studies = studies.filter(s => s.id !== study.id);
+                    saveStudies();
+                    alert('스터디가 삭제되었습니다.');
+                    window.location.href = 'study-list.html';
+                }
+            });
+
+            editDeleteContainer.appendChild(editButton);
+            editDeleteContainer.appendChild(deleteButton);
+            detailContent.appendChild(editDeleteContainer);
+
+
             if (study.status === '모집 완료') {
                 applyButton.textContent = '모집 완료';
                 applyButton.disabled = true;
@@ -185,9 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 applyMessage.style.color = '#dc3545';
             } else {
                 applyButton.addEventListener('click', () => {
-                    // 실제로는 로그인 여부 확인 및 신청 폼 팝업 등이 필요
                     alert(`${study.title} 스터디에 참여를 신청합니다! (실제로는 신청 메시지 작성 폼 등이 나타납니다.)`);
-                    // 신청 후 상태 변경 또는 리더에게 알림 등 로직 추가
                     applyMessage.textContent = '참여 신청이 완료되었습니다. 리더의 승인을 기다려주세요!';
                     applyMessage.style.color = 'green';
                     applyButton.disabled = true;

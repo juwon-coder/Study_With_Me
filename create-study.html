@@ -27,6 +27,10 @@
                 <h2>새 스터디 개설</h2>
                 <form id="create-study-form">
                     <div class="form-group">
+                        <label for="study-id">스터디 고유 ID:</label>
+                        <input type="text" id="study-id" name="study-id" required placeholder="스터디를 식별할 고유 ID를 입력하세요.">
+                    </div>
+                    <div class="form-group">
                         <label for="study-title">스터디명:</label>
                         <input type="text" id="study-title" name="study-title" required>
                     </div>
@@ -34,6 +38,8 @@
                         <label for="study-category">카테고리:</label>
                         <select id="study-category" name="study-category" required>
                             <option value="">선택하세요</option>
+                            <option value="학업">학업</option>
+                            <option value="취미/교양">취미/교양</option>
                             <option value="어학">어학</option>
                             <option value="코딩">코딩</option>
                             <option value="자격증">자격증</option>
@@ -47,7 +53,7 @@
                     </div>
                     <div class="form-group">
                         <label for="study-members">모집 인원:</label>
-                        <input type="number" id="study-members" name="study-members" min="2" max="20" value="4" required>
+                        <input type="number" id="study-members" name="study-members" value="4" required>
                     </div>
                     <div class="form-group">
                         <label for="study-method">진행 방식:</label>
