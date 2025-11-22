@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = '삭제하기';
-                deleteButton.classList.add('btn');
+                deleteButton.classList.add('btn'); // .btn 클래스 추가
                 deleteButton.style.backgroundColor = '#dc3545'; 
                 deleteButton.style.borderColor = '#dc3545';
                 deleteButton.style.marginLeft = '10px';
