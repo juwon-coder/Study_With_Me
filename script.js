@@ -9,6 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let myCreatedLeaders = JSON.parse(localStorage.getItem('myCreatedLeaders')) || []; // 이 브라우저에서 개설한 스터디 리더명 목록
     let currentLeader = localStorage.getItem('currentLeader') || null; // 마지막으로 스터디를 개설하거나 신청한 리더명 (이 브라우저의 가상 사용자)
 
+    // 이 브라우저의 고유 ID (스터디 신청자 식별용)
+    let browserUserId = localStorage.getItem('browserUserId');
+    if (!browserUserId) {
+        browserUserId = `user_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+        localStorage.setItem('browserUserId', browserUserId);
+    }
+
     function saveStudies() {
         localStorage.setItem('studies', JSON.stringify(studies));
     }
@@ -295,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 applyButton.parentNode.insertBefore(deleteButton, applyButton.nextSibling); 
 
             } else { // 다른 사람이 개설한 스터디일 경우 (또는 내가 개설한 스터디가 아닌 경우)
-                const isApplied = study.appliedMembers && study.appliedMembers.includes(currentLeader);
+                const isApplied = study.appliedMembers && study.appliedMembers.includes(browserUserId); // browserUserId 사용
 
                 if (study.status === '모집 완료') {
                     applyButton.textContent = '모집 완료';
@@ -323,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (!study.appliedMembers) {
                             study.appliedMembers = [];
                         }
-                        study.appliedMembers.push(currentLeader); 
+                        study.appliedMembers.push(browserUserId); // browserUserId 사용
                         study.currentMembersCount++; 
 
                         if (study.currentMembersCount >= study.members) {
@@ -366,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 myStudiesMessage.textContent = filteredMyStudies.length === 0 ? '아직 개설한 스터디가 없습니다. 새로운 스터디를 개설해보세요!' : '';
                 document.getElementById('my-studies-title').textContent = '내가 개설한 스터디';
             } else if (currentMyStudiesView === 'applied') {
-                filteredMyStudies = studies.filter(study => study.appliedMembers.includes(currentLeader));
+                filteredMyStudies = studies.filter(study => study.appliedMembers.includes(browserUserId)); // browserUserId 사용
                 myStudiesMessage.textContent = filteredMyStudies.length === 0 ? '아직 신청한 스터디가 없습니다. 다른 스터디에 참여 신청을 해보세요!' : '';
                 document.getElementById('my-studies-title').textContent = '내가 신청한 스터디';
             }
