@@ -32,10 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize example studies (only if no studies exist in localStorage)
     if (studies.length === 0) {
         const exampleStudies = [
-            { id: 'ex1', leader: 'Kim Min-jun', title: 'Python Basic Grammar Study', category: 'Coding', description: 'This is a Python basic study for programming beginners. It will be conducted online twice a week.', members: 5, currentMembersCount: 0, appliedMembers: [], method: 'Online', schedule: 'Mon, Wed 8 PM every week', deadline: '2025-12-31', status: 'Recruiting', createdAt: new Date().toISOString() },
-            { id: 'ex2', leader: 'Lee Seo-yeon', title: 'TOEIC 900+ Target Study', category: 'Language', description: 'This is a practical problem-solving and error analysis study for high TOEIC scores. It will be conducted offline.', members: 3, currentMembersCount: 1, appliedMembers: ['Park Ji-hoon'], method: 'Offline', schedule: 'Sat 10 AM every week', deadline: '2025-11-30', status: 'Recruiting', createdAt: new Date().toISOString() },
-            { id: 'ex3', leader: 'Park Ji-hoon', title: 'Mastering Modern JavaScript', category: 'Coding', description: 'This study covers ES6+ syntax and asynchronous programming. It uses a mixed online/offline method.', members: 7, currentMembersCount: 7, appliedMembers: ['Kim Min-jun','Lee Seo-yeon','Choi Yu-jin','Han Ah-reum','Jung Dae-hyun','Song Ji-eun','Kang Dong-won'], method: 'Mixed', schedule: 'Tue 7 PM every week', deadline: '2026-01-15', status: 'Recruitment Complete', createdAt: new Date().toISOString() },
-            { id: 'ex4', leader: 'Choi Yu-jin', title: 'Drawing Basics & Portrait Drawing', category: 'Hobbies/Liberal Arts', description: 'This study improves drawing skills and teaches portrait drawing. Weekly offline meetings.', members: 4, currentMembersCount: 2, appliedMembers: ['Kim Min-jun','Lee Seo-yeon'], method: 'Offline', schedule: 'Sun 2 PM every week', deadline: '2025-12-10', status: 'Recruiting', createdAt: new Date().toISOString() }
+            { id: 'ex1', leader: 'Kim Min-jun', title: 'Python Basic Grammar Study', category: 'Coding', description: 'This is a Python basic study for programming beginners. It will be conducted online twice a week.', members: 5, currentMembersCount: 0, appliedMembers: [], method: 'Online', schedule: 'Mon, Wed 8 PM every week', deadline: '2025-12-31', status: 'Open for applications', createdAt: new Date().toISOString() },
+            { id: 'ex2', leader: 'Lee Seo-yeon', title: 'TOEIC 900+ Target Study', category: 'Language', description: 'This is a practical problem-solving and error analysis study for high TOEIC scores. It will be conducted offline.', members: 3, currentMembersCount: 1, appliedMembers: ['Park Ji-hoon'], method: 'Offline', schedule: 'Sat 10 AM every week', deadline: '2025-11-30', status: 'Open for applications', createdAt: new Date().toISOString() },
+            { id: 'ex3', leader: 'Park Ji-hoon', title: 'Mastering Modern JavaScript', category: 'Coding', description: 'This study covers ES6+ syntax and asynchronous programming. It uses a mixed online/offline method.', members: 7, currentMembersCount: 7, appliedMembers: ['Kim Min-jun','Lee Seo-yeon','Choi Yu-jin','Han Ah-reum','Jung Dae-hyun','Song Ji-eun','Kang Dong-won'], method: 'Hybrid', schedule: 'Tue 7 PM every week', deadline: '2026-01-15', status: 'Recruitment completed', createdAt: new Date().toISOString() },
+            { id: 'ex4', leader: 'Choi Yu-jin', title: 'Drawing Basics & Portrait Drawing', category: 'Hobbies/Culture', description: 'This study improves drawing skills and teaches portrait drawing. Weekly offline meetings.', members: 4, currentMembersCount: 2, appliedMembers: ['Kim Min-jun','Lee Seo-yeon'], method: 'Offline', schedule: 'Sun 2 PM every week', deadline: '2025-12-10', status: 'Open for applications', createdAt: new Date().toISOString() }
         ];
         studies = exampleStudies; // 예시 스터디로 초기화
         saveStudies();
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>Leader: ${study.leader}</p>
                     <p>Recruitment Status: ${study.currentMembersCount}/${study.members}</p>
                     <p>${study.description.substring(0, 100)}...</p>
-                    <p class="status ${study.status === 'Recruitment Complete' ? 'closed' : ''}">${study.status}</p>
+                    <p class="status ${study.status === 'Recruitment completed' ? 'closed' : ''}">${study.status}</p>
                 `;
                 featuredStudiesGrid.appendChild(studyCard);
             });
@@ -118,15 +118,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: document.getElementById('study-method').value,
                 schedule: document.getElementById('study-schedule').value,
                 deadline: document.getElementById('study-deadline').value,
-                status: 'Recruiting', // Initial status
+                status: 'Open for applications', // Initial status
                 createdAt: new Date().toISOString()
             };
 
             // Automatic recruitment completion status update (on edit)
             if (newStudyData.currentMembersCount >= newStudyData.members) {
-                newStudyData.status = 'Recruitment Complete';
+                newStudyData.status = 'Recruitment completed';
             } else {
-                newStudyData.status = 'Recruiting';
+                newStudyData.status = 'Open for applications';
             }
 
             if (isEditing) {
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>Leader: ${study.leader}</p>
                     <p>Recruitment Status: ${study.currentMembersCount}/${study.members}</p>
                     <p>${study.description.substring(0, 100)}...</p>
-                    <p class="status ${study.status === 'Recruitment Complete' ? 'closed' : ''}">${study.status}</p>
+                    <p class="status ${study.status === 'Recruitment completed' ? 'closed' : ''}">${study.status}</p>
                 `;
                 targetGrid.appendChild(studyCard);
             });
@@ -304,8 +304,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else { // If it's a study created by someone else (or not by me)
                 const isApplied = study.appliedMembers && study.appliedMembers.includes(browserUserId); // Using browserUserId
 
-                if (study.status === 'Recruitment Complete') {
-                    applyButton.textContent = 'Recruitment Complete';
+                if (study.status === 'Recruitment completed') {
+                    applyButton.textContent = 'Recruitment completed';
                     applyButton.disabled = true;
                     applyButton.style.backgroundColor = '#6c757d'; 
                     applyMessage.textContent = 'This study has completed recruitment.';
@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     applyButton.addEventListener('click', () => {
                         if (study.currentMembersCount >= study.members) {
                             alert('Recruitment is full. Please try another study!');
-                            study.status = 'Recruitment Complete';
+                            study.status = 'Recruitment completed';
                             saveStudies();
                             window.location.reload(); 
                             return;
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         study.currentMembersCount++; 
 
                         if (study.currentMembersCount >= study.members) {
-                            study.status = 'Recruitment Complete';
+                            study.status = 'Recruitment completed';
                         }
 
                         saveStudies();
@@ -346,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         applyButton.style.backgroundColor = '#6c757d';
                         
                         document.getElementById('detail-study-members').textContent = `${study.currentMembersCount}/${study.members} members`;
-                        if (study.status === 'Recruitment Complete') {
+                        if (study.status === 'Recruitment completed') {
                             document.getElementById('detail-study-members').style.color = '#dc3545';
                         }
                     });
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p>Leader: ${study.leader}</p>
                             <p>Recruitment Status: ${study.currentMembersCount}/${study.members}</p>
                             <p>${study.description.substring(0, 100)}...</p>
-                            <p class="status ${study.status === 'Recruitment Complete' ? 'closed' : ''}">${study.status}</p>
+                            <p class="status ${study.status === 'Recruitment completed' ? 'closed' : ''}">${study.status}</p>
                         `;
                         myStudiesGrid.appendChild(studyCard);
                     });
