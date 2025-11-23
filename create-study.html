@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study_with_Me - 스터디 개설</title>
+    <title>Study_with_Me - Create Study</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,11 +12,11 @@
             <h1><a href="index.html">Study_with_Me</a></h1>
             <nav>
                 <ul>
-                    <li><a href="index.html">홈</a></li>
-                    <li><a href="about.html">소개</a></li>
-                    <li><a href="contact.html">문의</a></li>
-                    <li><a href="create-study.html">스터디 개설</a></li>
-                    <li><a href="my-studies.html">내 스터디</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="create-study.html">Create Study</a></li>
+                    <li><a href="my-studies.html">My Studies</a></li>
                 </ul>
             </nav>
         </div>
@@ -25,55 +25,55 @@
     <main>
         <section id="create-study-content">
             <div class="container">
-                <h2>새 스터디 개설</h2>
+                <h2>Create New Study</h2>
                 <form id="create-study-form">
                     <div class="form-group">
-                        <label for="study-leader">스터디 리더:</label>
-                        <input type="text" id="study-leader" name="study-leader" required placeholder="스터디 리더명을 입력하세요.">
+                        <label for="study-leader">Study Leader:</label>
+                        <input type="text" id="study-leader" name="study-leader" required placeholder="Enter study leader's name.">
                     </div>
                     <div class="form-group">
-                        <label for="study-title">스터디명:</label>
+                        <label for="study-title">Study Name:</label>
                         <input type="text" id="study-title" name="study-title" required>
                     </div>
                     <div class="form-group">
-                        <label for="study-category">카테고리:</label>
+                        <label for="study-category">Category:</label>
                         <select id="study-category" name="study-category" required>
-                            <option value="">선택하세요</option>
-                            <option value="학업">학업</option>
-                            <option value="취미/교양">취미/교양</option>
-                            <option value="어학">어학</option>
-                            <option value="코딩">코딩</option>
-                            <option value="자격증">자격증</option>
-                            <option value="취업">취업</option>
-                            <option value="기타">기타</option>
+                            <option value="">Select</option>
+                            <option value="Academics">Academics</option>
+                            <option value="Hobbies/Liberal Arts">Hobbies/Liberal Arts</option>
+                            <option value="Language">Language</option>
+                            <option value="Coding">Coding</option>
+                            <option value="Certifications">Certifications</option>
+                            <option value="Job Seeking">Job Seeking</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="study-description">스터디 설명:</label>
+                        <label for="study-description">Study Description:</label>
                         <textarea id="study-description" name="study-description" rows="8" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="study-members">모집 인원:</label>
+                        <label for="study-members">Number of Members:</label>
                         <input type="number" id="study-members" name="study-members" value="4" required>
                     </div>
                     <div class="form-group">
-                        <label for="study-method">진행 방식:</label>
+                        <label for="study-method">Method:</label>
                         <select id="study-method" name="study-method" required>
-                            <option value="">선택하세요</option>
-                            <option value="온라인">온라인</option>
-                            <option value="오프라인">오프라인</option>
-                            <option value="혼합">온/오프라인 혼합</option>
+                            <option value="">Select</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                            <option value="Mixed">Mixed (Online/Offline)</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="study-schedule">예상 스터디 일정:</label>
-                        <input type="text" id="study-schedule" name="study-schedule" placeholder="예: 매주 화요일 저녁 7시, 주 2회"> 
+                        <label for="study-schedule">Expected Study Schedule:</label>
+                        <input type="text" id="study-schedule" name="study-schedule" placeholder="e.g., Every Tuesday at 7 PM, Twice a week"> 
                     </div>
                     <div class="form-group">
-                        <label for="study-deadline">모집 마감일:</label>
+                        <label for="study-deadline">Recruitment Deadline:</label>
                         <input type="date" id="study-deadline" name="study-deadline">
                     </div>
-                    <button type="submit" class="btn">스터디 개설하기</button>
+                    <button type="submit" class="btn">Create Study</button>
                 </form>
                 <div id="create-study-message" style="margin-top: 20px; color: green;"></div>
             </div>

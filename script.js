@@ -1,15 +1,15 @@
-// script.js - 추후 JavaScript 기능을 추가할 예정입니다.
+// script.js - JavaScript functionalities will be added in the future.
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('StudyBuddy 웹사이트가 로드되었습니다.');
+    console.log('StudyBuddy website loaded.');
 
-    // --- 데이터 관리 (임시) ---
-    // 실제 백엔드 없이 데이터를 관리하기 위한 간단한 로직
+    // --- Data Management (Temporary) ---
+    // Simple logic for data management without a real backend
     let studies = JSON.parse(localStorage.getItem('studies')) || [];
-    let myCreatedLeaders = JSON.parse(localStorage.getItem('myCreatedLeaders')) || []; // 이 브라우저에서 개설한 스터디 리더명 목록
-    let currentLeader = localStorage.getItem('currentLeader') || null; // 마지막으로 스터디를 개설하거나 신청한 리더명 (이 브라우저의 가상 사용자)
+    let myCreatedLeaders = JSON.parse(localStorage.getItem('myCreatedLeaders')) || []; // List of study leader names created in this browser
+    let currentLeader = localStorage.getItem('currentLeader') || null; // Leader name who last created or applied for a study (virtual user of this browser)
 
-    // 이 브라우저의 고유 ID (스터디 신청자 식별용)
+    // Unique ID for this browser (for identifying study applicants)
     let browserUserId = localStorage.getItem('browserUserId');
     if (!browserUserId) {
         browserUserId = `user_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
@@ -29,19 +29,19 @@ document.addEventListener('DOMContentLoaded', () => {
         currentLeader = leaderName;
     }
 
-    // 예시 스터디 초기화 (localStorage에 스터디가 없을 때만)
+    // Initialize example studies (only if no studies exist in localStorage)
     if (studies.length === 0) {
         const exampleStudies = [
-            { id: 'ex1', leader: '김민준', title: '파이썬 기초 문법 스터디', category: '코딩', description: '프로그래밍 초보자를 위한 파이썬 기초 스터디입니다. 주 2회 온라인으로 진행됩니다.', members: 5, currentMembersCount: 0, appliedMembers: [], method: '온라인', schedule: '매주 월,수 저녁 8시', deadline: '2025-12-31', status: '모집 중', createdAt: new Date().toISOString() },
-            { id: 'ex2', leader: '이서연', title: '토익 900+ 목표 스터디', category: '어학', description: '토익 고득점을 위한 실전 문제 풀이 및 오답 분석 스터디입니다. 오프라인으로 진행됩니다.', members: 3, currentMembersCount: 1, appliedMembers: ['박지훈'], method: '오프라인', schedule: '매주 토요일 오전 10시', deadline: '2025-11-30', status: '모집 중', createdAt: new Date().toISOString() },
-            { id: 'ex3', leader: '박지훈', title: '모던 자바스크립트 완전 정복', category: '코딩', description: 'ES6+ 문법과 비동기 프로그래밍을 학습하는 스터디입니다. 온라인 혼합 방식입니다.', members: 7, currentMembersCount: 7, appliedMembers: ['김민준','이서연','최유진','한아름','정대현','송지은','강동원'], method: '혼합', schedule: '매주 화요일 저녁 7시', deadline: '2026-01-15', status: '모집 완료', createdAt: new Date().toISOString() },
-            { id: 'ex4', leader: '최유진', title: '드로잉 기초 & 인물화', category: '취미/교양', description: '드로잉 실력을 향상시키고 인물화를 배우는 스터디입니다. 매주 오프라인 모임.', members: 4, currentMembersCount: 2, appliedMembers: ['김민준','이서연'], method: '오프라인', schedule: '매주 일요일 오후 2시', deadline: '2025-12-10', status: '모집 중', createdAt: new Date().toISOString() }
+            { id: 'ex1', leader: 'Kim Min-jun', title: 'Python Basic Grammar Study', category: 'Coding', description: 'This is a Python basic study for programming beginners. It will be conducted online twice a week.', members: 5, currentMembersCount: 0, appliedMembers: [], method: 'Online', schedule: 'Mon, Wed 8 PM every week', deadline: '2025-12-31', status: 'Recruiting', createdAt: new Date().toISOString() },
+            { id: 'ex2', leader: 'Lee Seo-yeon', title: 'TOEIC 900+ Target Study', category: 'Language', description: 'This is a practical problem-solving and error analysis study for high TOEIC scores. It will be conducted offline.', members: 3, currentMembersCount: 1, appliedMembers: ['Park Ji-hoon'], method: 'Offline', schedule: 'Sat 10 AM every week', deadline: '2025-11-30', status: 'Recruiting', createdAt: new Date().toISOString() },
+            { id: 'ex3', leader: 'Park Ji-hoon', title: 'Mastering Modern JavaScript', category: 'Coding', description: 'This study covers ES6+ syntax and asynchronous programming. It uses a mixed online/offline method.', members: 7, currentMembersCount: 7, appliedMembers: ['Kim Min-jun','Lee Seo-yeon','Choi Yu-jin','Han Ah-reum','Jung Dae-hyun','Song Ji-eun','Kang Dong-won'], method: 'Mixed', schedule: 'Tue 7 PM every week', deadline: '2026-01-15', status: 'Recruitment Complete', createdAt: new Date().toISOString() },
+            { id: 'ex4', leader: 'Choi Yu-jin', title: 'Drawing Basics & Portrait Drawing', category: 'Hobbies/Liberal Arts', description: 'This study improves drawing skills and teaches portrait drawing. Weekly offline meetings.', members: 4, currentMembersCount: 2, appliedMembers: ['Kim Min-jun','Lee Seo-yeon'], method: 'Offline', schedule: 'Sun 2 PM every week', deadline: '2025-12-10', status: 'Recruiting', createdAt: new Date().toISOString() }
         ];
         studies = exampleStudies; // 예시 스터디로 초기화
         saveStudies();
         saveMyCreatedLeaders(); // 초기화 시 빈 배열 저장
 
-        // 예시 스터디 개설 리더들을 myCreatedLeaders에 추가 (선택적)
+        // Add example study creation leaders to myCreatedLeaders (optional)
         // exampleStudies.forEach(s => {
         //     if (!myCreatedLeaders.includes(s.leader)) {
         //         myCreatedLeaders.push(s.leader);
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // saveMyCreatedLeaders();
     }
 
-    // --- 문의하기 폼 제출 처리 (예시) ---
+    // --- Contact Form Submission Handling (Example) ---
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
@@ -59,20 +59,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('email').value;
             const message = document.getElementById('message').value;
 
-            console.log('문의 내용:', { name, email, message });
+            console.log('Contact details:', { name, email, message });
 
             const formMessage = document.getElementById('form-message');
-            formMessage.textContent = '문의해주셔서 감사합니다! 빠른 시일 내에 답변드리겠습니다.';
+            formMessage.textContent = 'Thank you for your inquiry! We will reply as soon as possible.';
             contactForm.reset();
         });
     }
 
-    // --- 메인 페이지: 주목할 만한 스터디 로드 ---
+    // --- Main Page: Load Featured Studies ---
     const featuredStudiesGrid = document.querySelector('#featured-studies .study-grid');
     if (featuredStudiesGrid) {
         const featured = studies.slice(0, 3); 
         if (featured.length === 0) {
-            featuredStudiesGrid.innerHTML = '<p>아직 개설된 스터디가 없습니다. 새로운 스터디를 개설해보세요!</p>';
+            featuredStudiesGrid.innerHTML = '<p>No studies have been created yet. Try creating a new study!</p>';
         } else {
             featured.forEach(study => {
                 const studyCard = document.createElement('div');
@@ -80,31 +80,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 studyCard.innerHTML = `
                     <span class="category">${study.category}</span>
                     <h4><a href="study-detail.html?id=${study.id}">${study.title}</a></h4>
-                    <p>리더: ${study.leader}</p>
-                    <p>모집현황: ${study.currentMembersCount}/${study.members}</p>
+                    <p>Leader: ${study.leader}</p>
+                    <p>Recruitment Status: ${study.currentMembersCount}/${study.members}</p>
                     <p>${study.description.substring(0, 100)}...</p>
-                    <p class="status ${study.status === '모집 완료' ? 'closed' : ''}">${study.status}</p>
+                    <p class="status ${study.status === 'Recruitment Complete' ? 'closed' : ''}">${study.status}</p>
                 `;
                 featuredStudiesGrid.appendChild(studyCard);
             });
         }
     }
 
-    // --- 스터디 개설 페이지: 폼 제출 처리 ---
+    // --- Create Study Page: Form Submission Handling ---
     const createStudyForm = document.getElementById('create-study-form');
     if (createStudyForm) {
         createStudyForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
             const leaderName = document.getElementById('study-leader').value.trim();
-            const isEditing = !!document.getElementById('create-study-form').dataset.editingId; // 수정 모드인지 확인
+            const isEditing = !!document.getElementById('create-study-form').dataset.editingId; // Check if in edit mode
 
             if (!leaderName) {
-                alert('스터디 리더명을 입력해주세요.');
+                alert('Please enter the study leader\'s name.');
                 return;
             }
             
-            const newStudyId = isEditing ? document.getElementById('create-study-form').dataset.editingId : `study_${Date.now()}`; // 새로운 ID 생성
+            const newStudyId = isEditing ? document.getElementById('create-study-form').dataset.editingId : `study_${Date.now()}`; // Generate new ID
 
             const newStudyData = {
                 id: newStudyId,
@@ -113,55 +113,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 category: document.getElementById('study-category').value,
                 description: document.getElementById('study-description').value,
                 members: parseInt(document.getElementById('study-members').value),
-                currentMembersCount: isEditing ? studies.find(s => s.id === newStudyId).currentMembersCount : 0, // 수정 시 기존 값 유지, 개설 시 0
-                appliedMembers: isEditing ? studies.find(s => s.id === newStudyId).appliedMembers : [], // 수정 시 기존 값 유지, 개설 시 빈 배열
+                currentMembersCount: isEditing ? studies.find(s => s.id === newStudyId).currentMembersCount : 0, // Retain existing value on edit, 0 on creation
+                appliedMembers: isEditing ? studies.find(s => s.id === newStudyId).appliedMembers : [], // Retain existing value on edit, empty array on creation
                 method: document.getElementById('study-method').value,
                 schedule: document.getElementById('study-schedule').value,
                 deadline: document.getElementById('study-deadline').value,
-                status: '모집 중', // 초기 상태
+                status: 'Recruiting', // Initial status
                 createdAt: new Date().toISOString()
             };
 
-            // 모집 완료 상태 자동 업데이트 (수정 시)
+            // Automatic recruitment completion status update (on edit)
             if (newStudyData.currentMembersCount >= newStudyData.members) {
-                newStudyData.status = '모집 완료';
+                newStudyData.status = 'Recruitment Complete';
             } else {
-                newStudyData.status = '모집 중';
+                newStudyData.status = 'Recruiting';
             }
 
             if (isEditing) {
-                // 기존 스터디 업데이트
+                // Update existing study
                 const editingId = document.getElementById('create-study-form').dataset.editingId;
                 studies = studies.map(s => (s.id === editingId ? { ...s, ...newStudyData } : s));
-                alert('스터디가 성공적으로 수정되었습니다!');
+                alert('Study successfully updated!');
             } else {
-                // 새로운 스터디 추가
-                studies.unshift(newStudyData); // 최신 스터디가 맨 위에 오도록
-                alert('새로운 스터디가 성공적으로 개설되었습니다!');
+                // Add new study
+                studies.unshift(newStudyData); // Latest study at the top
+                alert('New study successfully created!');
                 if (!myCreatedLeaders.includes(leaderName)) {
                     myCreatedLeaders.push(leaderName);
                     saveMyCreatedLeaders();
                 }
-                saveCurrentLeader(leaderName); // 마지막으로 개설한 리더명 저장
+                saveCurrentLeader(leaderName); // Save the name of the last created leader
             }
             saveStudies();
 
             createStudyForm.reset();
-            console.log('처리된 스터디:', newStudyData);
+            console.log('Processed study:', newStudyData);
 
             setTimeout(() => {
-                window.location.href = 'my-studies.html'; // 내 스터디 페이지로 이동
+                window.location.href = 'my-studies.html'; // Redirect to My Studies page
             }, 1000);
         });
 
-        // 수정 모드로 페이지 접근 시 폼 채우기
+        // Fill form when accessing page in edit mode
         const urlParams = new URLSearchParams(window.location.search);
         const editStudyId = urlParams.get('editId');
         if (editStudyId) {
             const studyToEdit = studies.find(s => s.id === editStudyId);
             if (studyToEdit) {
                 document.getElementById('study-leader').value = studyToEdit.leader;
-                document.getElementById('study-leader').readOnly = true; // 리더명은 수정 불가
+                document.getElementById('study-leader').readOnly = true; // Leader name cannot be edited
                 document.getElementById('study-title').value = studyToEdit.title;
                 document.getElementById('study-category').value = studyToEdit.category;
                 document.getElementById('study-description').value = studyToEdit.description;
@@ -169,30 +169,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('study-method').value = studyToEdit.method;
                 document.getElementById('study-schedule').value = studyToEdit.schedule;
                 document.getElementById('study-deadline').value = studyToEdit.deadline;
-                document.querySelector('#create-study-content h2').textContent = '스터디 수정';
-                document.querySelector('#create-study-form button[type="submit"]').textContent = '스터디 수정하기';
-                createStudyForm.dataset.editingId = editStudyId; // 수정 모드임을 표시
+                document.querySelector('#create-study-content h2').textContent = 'Edit Study';
+                document.querySelector('#create-study-form button[type="submit"]').textContent = 'Save Changes';
+                createStudyForm.dataset.editingId = editStudyId; // Indicate edit mode
             } else {
-                alert('수정할 스터디를 찾을 수 없습니다.');
+                alert('Could not find study to edit.');
                 window.location.href = 'my-studies.html';
             }
         }
     }
 
-    // --- 스터디 목록 페이지: 스터디 로드 및 필터링 ---
+    // --- Study List Page: Load and Filter Studies ---
     const allStudiesGrid = document.getElementById('all-studies-grid');
     const searchInput = document.getElementById('search-input');
     const categoryFilter = document.getElementById('category-filter');
     const methodFilter = document.getElementById('method-filter');
     const statusFilter = document.getElementById('status-filter');
-    const myStudiesFilter = document.getElementById('my-studies-filter'); // 새로운 필터 추가
+    const myStudiesFilter = document.getElementById('my-studies-filter'); // Add new filter
     const applyFiltersBtn = document.getElementById('apply-filters');
 
     function renderStudies(filteredStudies, targetGrid) {
         if (targetGrid) {
-            targetGrid.innerHTML = ''; // 기존 목록 초기화
+            targetGrid.innerHTML = ''; // Clear existing list
             if (filteredStudies.length === 0) {
-                targetGrid.innerHTML = '<p style="text-align: center; margin-top: 20px; color: #555;">조건에 맞는 스터디가 없습니다.</p>';
+                targetGrid.innerHTML = '<p style="text-align: center; margin-top: 20px; color: #555;">No studies match the criteria.</p>';
                 return;
             }
             filteredStudies.forEach(study => {
@@ -201,10 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 studyCard.innerHTML = `
                     <span class="category">${study.category}</span>
                     <h4><a href="study-detail.html?id=${study.id}">${study.title}</a></h4>
-                    <p>리더: ${study.leader}</p>
-                    <p>모집현황: ${study.currentMembersCount}/${study.members}</p>
+                    <p>Leader: ${study.leader}</p>
+                    <p>Recruitment Status: ${study.currentMembersCount}/${study.members}</p>
                     <p>${study.description.substring(0, 100)}...</p>
-                    <p class="status ${study.status === '모집 완료' ? 'closed' : ''}">${study.status}</p>
+                    <p class="status ${study.status === 'Recruitment Complete' ? 'closed' : ''}">${study.status}</p>
                 `;
                 targetGrid.appendChild(studyCard);
             });
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedCategory = categoryFilter ? categoryFilter.value : 'all';
         const selectedMethod = methodFilter ? methodFilter.value : 'all';
         const selectedStatus = statusFilter ? statusFilter.value : 'all';
-        const selectedMyStudiesFilter = myStudiesFilter ? myStudiesFilter.value : 'all'; // 새로운 필터 값
+        const selectedMyStudiesFilter = myStudiesFilter ? myStudiesFilter.value : 'all'; // New filter value
 
         if (searchTerm) {
             filtered = filtered.filter(study =>
@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 스터디 상세 페이지: 정보 로드 및 참여 신청 ---
+    // --- Study Detail Page: Load Info and Apply for Study ---
     if (window.location.pathname.includes('study-detail.html')) {
         const urlParams = new URLSearchParams(window.location.search);
         const studyId = urlParams.get('id'); 
@@ -266,19 +266,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (study) {
             document.getElementById('detail-study-title').textContent = study.title;
             document.getElementById('detail-study-category').textContent = study.category;
-            document.getElementById('detail-study-members').textContent = `${study.currentMembersCount}/${study.members}명`; 
+            document.getElementById('detail-study-members').textContent = `${study.currentMembersCount}/${study.members} members`; 
             document.getElementById('detail-study-method').textContent = study.method;
-            document.getElementById('detail-study-schedule').textContent = study.schedule || '정보 없음';
-            document.getElementById('detail-study-deadline').textContent = study.deadline || '상시 모집';
+            document.getElementById('detail-study-schedule').textContent = study.schedule || 'N/A';
+            document.getElementById('detail-study-deadline').textContent = study.deadline || 'Always Recruiting';
             document.getElementById('detail-study-description').textContent = study.description;
             document.getElementById('detail-study-leader').textContent = study.leader; 
 
             const applyButton = document.getElementById('apply-for-study');
             const applyMessage = document.getElementById('apply-message');
 
-            // --- 내가 개설한 스터디일 경우 수정/삭제 버튼 표시 ---
+            // --- Display Edit/Delete buttons if it's a study I created ---
             if (myCreatedLeaders.includes(study.leader)) { 
-                applyButton.textContent = '수정하기';
+                applyButton.textContent = 'Edit';
                 applyButton.style.backgroundColor = '#28a745'; 
                 applyButton.style.borderColor = '#28a745';
                 applyButton.onclick = () => {
@@ -286,96 +286,96 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 const deleteButton = document.createElement('button');
-                deleteButton.textContent = '삭제하기';
+                deleteButton.textContent = 'Delete';
                 deleteButton.classList.add('btn'); 
                 deleteButton.style.backgroundColor = '#dc3545'; 
                 deleteButton.style.borderColor = '#dc3545';
                 deleteButton.style.marginLeft = '10px';
                 deleteButton.addEventListener('click', () => {
-                    if (confirm('정말로 이 스터디를 삭제하시겠습니까?')) {
+                    if (confirm('Are you sure you want to delete this study?')) {
                         studies = studies.filter(s => s.id !== study.id);
                         saveStudies();
-                        alert('스터디가 삭제되었습니다.');
+                        alert('Study deleted.');
                         window.location.href = 'my-studies.html'; 
                     }
                 });
                 applyButton.parentNode.insertBefore(deleteButton, applyButton.nextSibling); 
 
-            } else { // 다른 사람이 개설한 스터디일 경우 (또는 내가 개설한 스터디가 아닌 경우)
-                const isApplied = study.appliedMembers && study.appliedMembers.includes(browserUserId); // browserUserId 사용
+            } else { // If it's a study created by someone else (or not by me)
+                const isApplied = study.appliedMembers && study.appliedMembers.includes(browserUserId); // Using browserUserId
 
-                if (study.status === '모집 완료') {
-                    applyButton.textContent = '모집 완료';
+                if (study.status === 'Recruitment Complete') {
+                    applyButton.textContent = 'Recruitment Complete';
                     applyButton.disabled = true;
                     applyButton.style.backgroundColor = '#6c757d'; 
-                    applyMessage.textContent = '이 스터디는 현재 모집이 완료되었습니다.';
+                    applyMessage.textContent = 'This study has completed recruitment.';
                     applyMessage.style.color = '#dc3545';
                 } else if (isApplied) {
-                    applyButton.textContent = '신청 완료';
+                    applyButton.textContent = 'Application Complete';
                     applyButton.disabled = true;
                     applyButton.style.backgroundColor = '#6c757d';
-                    applyMessage.textContent = '이미 이 스터디에 참여 신청을 완료했습니다.';
+                    applyMessage.textContent = 'You have already applied to join this study.';
                     applyMessage.style.color = 'green';
                 } else {
                     applyButton.addEventListener('click', () => {
                         if (study.currentMembersCount >= study.members) {
-                            alert('모집 인원이 가득 찼습니다. 다음 스터디를 이용해주세요!');
-                            study.status = '모집 완료';
+                            alert('Recruitment is full. Please try another study!');
+                            study.status = 'Recruitment Complete';
                             saveStudies();
                             window.location.reload(); 
                             return;
                         }
 
-                        alert(`${study.title} 스터디에 참여를 신청합니다!`);
+                        alert(`Applying to join the ${study.title} study!`);
                         if (!study.appliedMembers) {
                             study.appliedMembers = [];
                         }
-                        study.appliedMembers.push(browserUserId); // browserUserId 사용
+                        study.appliedMembers.push(browserUserId); // Using browserUserId
                         study.currentMembersCount++; 
 
                         if (study.currentMembersCount >= study.members) {
-                            study.status = '모집 완료';
+                            study.status = 'Recruitment Complete';
                         }
 
                         saveStudies();
 
-                        applyMessage.textContent = '참여 신청이 완료되었습니다. 리더의 승인을 기다려주세요!';
+                        applyMessage.textContent = 'Application submitted. Please await leader\'s approval!';
                         applyMessage.style.color = 'green';
                         applyButton.disabled = true;
-                        applyButton.textContent = '신청 완료';
+                        applyButton.textContent = 'Application Complete';
                         applyButton.style.backgroundColor = '#6c757d';
                         
-                        document.getElementById('detail-study-members').textContent = `${study.currentMembersCount}/${study.members}명`;
-                        if (study.status === '모집 완료') {
+                        document.getElementById('detail-study-members').textContent = `${study.currentMembersCount}/${study.members} members`;
+                        if (study.status === 'Recruitment Complete') {
                             document.getElementById('detail-study-members').style.color = '#dc3545';
                         }
                     });
                 }
             }
         } else {
-            document.getElementById('study-detail-content').innerHTML = '<h2>스터디를 찾을 수 없습니다.</h2><p>존재하지 않거나 삭제된 스터디입니다.</p>';
+            document.getElementById('study-detail-content').innerHTML = '<h2>Study not found.</h2><p>The study does not exist or has been deleted.</p>';
         }
     }
 
-    // --- 내 스터디 페이지: 내가 개설한 스터디 로드 ---
+    // --- My Studies Page: Load Studies I Created ---
     if (window.location.pathname.includes('my-studies.html')) {
         const myStudiesGrid = document.getElementById('my-studies-grid');
         const myStudiesMessage = document.getElementById('my-studies-message');
         const showCreatedBtn = document.getElementById('show-created');
         const showAppliedBtn = document.getElementById('show-applied');
 
-        let currentMyStudiesView = 'created'; // 기본값: 내가 개설한 스터디
+        let currentMyStudiesView = 'created'; // Default: Studies I created
 
         function renderMyStudies() {
             let filteredMyStudies = [];
             if (currentMyStudiesView === 'created') {
                 filteredMyStudies = studies.filter(study => myCreatedLeaders.includes(study.leader));
-                myStudiesMessage.textContent = filteredMyStudies.length === 0 ? '아직 개설한 스터디가 없습니다. 새로운 스터디를 개설해보세요!' : '';
-                document.getElementById('my-studies-title').textContent = '내가 개설한 스터디';
+                myStudiesMessage.textContent = filteredMyStudies.length === 0 ? 'You haven\'t created any studies yet. Try creating a new one!' : '';
+                document.getElementById('my-studies-title').textContent = 'Studies I Created';
             } else if (currentMyStudiesView === 'applied') {
-                filteredMyStudies = studies.filter(study => study.appliedMembers.includes(browserUserId)); // browserUserId 사용
-                myStudiesMessage.textContent = filteredMyStudies.length === 0 ? '아직 신청한 스터디가 없습니다. 다른 스터디에 참여 신청을 해보세요!' : '';
-                document.getElementById('my-studies-title').textContent = '내가 신청한 스터디';
+                filteredMyStudies = studies.filter(study => study.appliedMembers.includes(browserUserId)); // Using browserUserId
+                myStudiesMessage.textContent = filteredMyStudies.length === 0 ? 'You haven\'t applied for any studies yet. Try applying to other studies!' : '';
+                document.getElementById('my-studies-title').textContent = 'Studies I Applied For';
             }
 
             if (myStudiesGrid) {
@@ -390,10 +390,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         studyCard.innerHTML = `
                             <span class="category">${study.category}</span>
                             <h4><a href="study-detail.html?id=${study.id}">${study.title}</a></h4>
-                            <p>리더: ${study.leader}</p>
-                            <p>모집현황: ${study.currentMembersCount}/${study.members}</p>
+                            <p>Leader: ${study.leader}</p>
+                            <p>Recruitment Status: ${study.currentMembersCount}/${study.members}</p>
                             <p>${study.description.substring(0, 100)}...</p>
-                            <p class="status ${study.status === '모집 완료' ? 'closed' : ''}">${study.status}</p>
+                            <p class="status ${study.status === 'Recruitment Complete' ? 'closed' : ''}">${study.status}</p>
                         `;
                         myStudiesGrid.appendChild(studyCard);
                     });
@@ -415,6 +415,6 @@ document.addEventListener('DOMContentLoaded', () => {
             renderMyStudies();
         });
 
-        renderMyStudies(); // 초기 로드
+        renderMyStudies(); // Initial load
     }
 });
